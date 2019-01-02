@@ -1,0 +1,56 @@
+---
+#
+# This is the canonical configuration for the `README.md`
+# Run `make readme` to rebuild the `README.md`
+#
+
+# Name of this project
+name: terraform-aws-kops-iam-authenticator-config
+
+# Logo for this project
+#logo: docs/logo.png
+
+# License of this project
+license: "APACHE2"
+
+# Canonical GitHub repo
+github_repo: cloudposse/terraform-aws-kops-iam-authenticator-config
+
+# Badges to display
+badges:
+  - name: "Build Status"
+    image: "https://travis-ci.org/cloudposse/terraform-aws-kops-iam-authenticator-config.svg?branch=master"
+    url: "https://travis-ci.org/cloudposse/terraform-aws-kops-iam-authenticator-config"
+  - name: "Latest Release"
+    image: "https://img.shields.io/github/release/cloudposse/terraform-aws-kops-iam-authenticator-config.svg"
+    url: "https://github.com/cloudposse/terraform-aws-kops-iam-authenticator-config/releases/latest"
+  - name: "Slack Community"
+    image: "https://slack.cloudposse.com/badge.svg"
+    url: "https://slack.cloudposse.com"
+
+related:
+
+# Short description of this project
+description: |-
+  Terraform module to create and apply a Kubernetes ConfigMap for `aws-iam-authenticator` to be used with Kops to map IAM principals to Kubernetes users
+
+
+# How to use this project
+usage: |-
+  ### Simple Example
+
+  ```hcl
+  ```
+
+include:
+  - "docs/targets.md"
+  - "docs/terraform.md"
+
+# Contributors to this project
+contributors:
+  - name: "Erik Osterman"
+    homepage: "https://github.com/osterman"
+    github: "osterman"
+  - name: "Andriy Knysh"
+    homepage: "https://github.com/aknysh"
+    github: "aknysh"
