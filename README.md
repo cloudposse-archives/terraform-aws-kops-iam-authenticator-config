@@ -8,7 +8,9 @@
  [![Build Status](https://travis-ci.org/cloudposse/terraform-aws-kops-iam-authenticator-config.svg?branch=master)](https://travis-ci.org/cloudposse/terraform-aws-kops-iam-authenticator-config) [![Latest Release](https://img.shields.io/github/release/cloudposse/terraform-aws-kops-iam-authenticator-config.svg)](https://github.com/cloudposse/terraform-aws-kops-iam-authenticator-config/releases/latest) [![Slack Community](https://slack.cloudposse.com/badge.svg)](https://slack.cloudposse.com)
 
 
-Terraform module to create and apply a Kubernetes ConfigMap for `aws-iam-authenticator` to be used with Kops to map IAM principals to Kubernetes users
+Terraform module to create and apply a [`Kubernetes`](https://kubernetes.io/) ConfigMap to map AWS IAM roles to Kubernetes users/groups.
+This will configure clusters managed by [`kops`](https://github.com/kubernetes/kops) to use [`aws-iam-authenticator`](https://github.com/kubernetes-sigs/aws-iam-authenticator),
+allowing to use AWS IAM credentials to authenticate to a Kubernetes cluster.
 
 
 ---
@@ -44,9 +46,17 @@ We literally have [*hundreds of terraform modules*][terraform_modules] that are 
 
 ## Usage
 
-### Simple Example
 
 ```hcl
+  module "iam_authenticator_config" {
+    source                = "git::https://github.com/cloudposse/terraform-aws-kops-iam-authenticator-config.git?ref=master"
+    admin_iam_role_arn    = "arn:aws:iam::000000000000:role/KubernetesAdmin"
+    admin_k8s_username    = "kubernetes-admin"
+    admin_k8s_groups      = ["system:masters"]
+    readonly_iam_role_arn = "arn:aws:iam::000000000000:role/KubernetesReadonly"
+    readonly_k8s_username = "kubernetes-readonly"
+    readonly_k8s_groups   = ["system:authenticated"]
+  }
 ```
 
 
@@ -68,17 +78,18 @@ Available targets:
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| additional_tag_map | Additional tags for appending to each tag map | map | `<map>` | no |
-| attributes | Additional attributes (e.g. `1`) | list | `<list>` | no |
-| context | Default context to use for passing state between label invocations | map | `<map>` | no |
-| delimiter | Delimiter to be used between `namespace`, `environment`, `stage`, `name` and `attributes` | string | `-` | no |
-| enabled | Set to false to prevent the module from creating any resources | string | `true` | no |
-| environment | Environment, e.g. 'prod', 'staging', 'dev', 'pre-prod', 'UAT' | string | `` | no |
-| label_order | The naming order of the id output and Name tag | list | `<list>` | no |
-| name | Solution name, e.g. 'app' or 'jenkins' | string | `` | no |
-| namespace | Namespace, which could be your organization name or abbreviation, e.g. 'eg' or 'cp' | string | `` | no |
-| stage | Stage, e.g. 'prod', 'staging', 'dev', OR 'source', 'build', 'test', 'deploy', 'release' | string | `` | no |
-| tags | Additional tags (e.g. `map('BusinessUnit','XYZ')` | map | `<map>` | no |
+| admin_iam_role_arn | IAM Role with admin permissions to map to `admin_k8s_username` | string | - | yes |
+| admin_k8s_groups | List of Kubernetes groups to be mapped to `admin_iam_role_arn` | list | - | yes |
+| admin_k8s_username | Kubernetes admin username to be mapped to `admin_iam_role_arn` | string | - | yes |
+| readonly_iam_role_arn | IAM Role with readonly permissions to map to `readonly_k8s_username` | string | - | yes |
+| readonly_k8s_groups | List of Kubernetes groups to be mapped to `readonly_iam_role_arn` | list | - | yes |
+| readonly_k8s_username | Kubernetes readonly username to be mapped to `readonly_iam_role_arn` | string | - | yes |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| kubeconfig_path | kubeconfig path |
 
 
 
@@ -94,6 +105,17 @@ Are you using this project or any of our other projects? Consider [leaving a tes
 
 Check out these related projects.
 
+- [terraform-aws-kops-metadata](https://github.com/cloudposse/terraform-aws-kops-metadata) - Terraform module to lookup resources within a Kops cluster for easier integration with Terraform
+- [terraform-aws-kops-vpc-peering](https://github.com/cloudposse/terraform-aws-kops-vpc-peering) - Terraform module to create a peering connection between a backing services VPC and a VPC created by Kops
+- [terraform-aws-kops-ecr](https://github.com/cloudposse/terraform-aws-kops-ecr) - Terraform module to provision an ECR repository and grant users and kubernetes nodes access to it.
+- [terraform-aws-kops-state-backend](https://github.com/cloudposse/terraform-aws-kops-state-backend) - Easily bootstrap kops clusters (DNS & S3 Bucket)
+- [terraform-aws-kops-external-dns](https://github.com/cloudposse/terraform-aws-kops-external-dns) - Terraform module to provision an IAM role for external-dns running in a Kops cluster, and attach an IAM policy to the role with permissions to modify Route53 record sets
+- [terraform-aws-kops-route53](https://github.com/cloudposse/terraform-aws-kops-route53) - Terraform module to lookup the IAM role associated with `kops` masters, and attach an IAM policy to the role with permissions to modify Route53 record sets
+- [terraform-aws-kops-vault-backend](https://github.com/cloudposse/terraform-aws-kops-vault-backend) - Terraform module to provision an S3 bucket for HashiCorp Vault secrets storage, and an IAM role and policy with permissions for Kops nodes to access the bucket
+- [terraform-aws-kops-chart-repo](https://github.com/cloudposse/terraform-aws-kops-chart-repo) - Terraform module to provision an S3 bucket for Helm chart repository, and an IAM role and policy with permissions for Kops nodes to access the bucket
+- [terraform-aws-eks-cluster](https://github.com/cloudposse/terraform-aws-eks-cluster) - Terraform module to provision an EKS cluster on AWS
+- [terraform-aws-eks-workers](https://github.com/cloudposse/terraform-aws-eks-workers) - Terraform module to provision an AWS AutoScaling Group, IAM Role, and Security Group for EKS Workers
+- [terraform-aws-ec2-autoscale-group](https://github.com/cloudposse/terraform-aws-ec2-autoscale-group) - Terraform module to provision AutoScaling Group and Launch Template on AWS
 
 
 

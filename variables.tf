@@ -1,65 +1,29 @@
-variable "namespace" {
+variable "admin_iam_role_arn" {
   type        = "string"
-  default     = ""
-  description = "Namespace, which could be your organization name or abbreviation, e.g. 'eg' or 'cp'"
+  description = "IAM Role with admin permissions to map to `admin_k8s_username`"
 }
 
-variable "environment" {
+variable "admin_k8s_username" {
   type        = "string"
-  default     = ""
-  description = "Environment, e.g. 'prod', 'staging', 'dev', 'pre-prod', 'UAT'"
+  description = "Kubernetes admin username to be mapped to `admin_iam_role_arn`"
 }
 
-variable "stage" {
-  type        = "string"
-  default     = ""
-  description = "Stage, e.g. 'prod', 'staging', 'dev', OR 'source', 'build', 'test', 'deploy', 'release'"
-}
-
-variable "name" {
-  type        = "string"
-  default     = ""
-  description = "Solution name, e.g. 'app' or 'jenkins'"
-}
-
-variable "enabled" {
-  type        = "string"
-  default     = "true"
-  description = "Set to false to prevent the module from creating any resources"
-}
-
-variable "delimiter" {
-  type        = "string"
-  default     = "-"
-  description = "Delimiter to be used between `namespace`, `environment`, `stage`, `name` and `attributes`"
-}
-
-variable "attributes" {
+variable "admin_k8s_groups" {
   type        = "list"
-  default     = []
-  description = "Additional attributes (e.g. `1`)"
+  description = "List of Kubernetes groups to be mapped to `admin_iam_role_arn`"
 }
 
-variable "tags" {
-  type        = "map"
-  default     = {}
-  description = "Additional tags (e.g. `map('BusinessUnit','XYZ')`"
+variable "readonly_iam_role_arn" {
+  type        = "string"
+  description = "IAM Role with readonly permissions to map to `readonly_k8s_username`"
 }
 
-variable "additional_tag_map" {
-  type        = "map"
-  default     = {}
-  description = "Additional tags for appending to each tag map"
+variable "readonly_k8s_username" {
+  type        = "string"
+  description = "Kubernetes readonly username to be mapped to `readonly_iam_role_arn`"
 }
 
-variable "context" {
-  type        = "map"
-  default     = {}
-  description = "Default context to use for passing state between label invocations"
-}
-
-variable "label_order" {
+variable "readonly_k8s_groups" {
   type        = "list"
-  default     = []
-  description = "The naming order of the id output and Name tag"
+  description = "List of Kubernetes groups to be mapped to `readonly_iam_role_arn`"
 }

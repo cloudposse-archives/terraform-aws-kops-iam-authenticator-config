@@ -29,17 +29,60 @@ badges:
     url: "https://slack.cloudposse.com"
 
 related:
+  - name: "terraform-aws-kops-metadata"
+    description: "Terraform module to lookup resources within a Kops cluster for easier integration with Terraform"
+    url: "https://github.com/cloudposse/terraform-aws-kops-metadata"
+  - name: "terraform-aws-kops-vpc-peering"
+    description: "Terraform module to create a peering connection between a backing services VPC and a VPC created by Kops"
+    url: "https://github.com/cloudposse/terraform-aws-kops-vpc-peering"
+  - name: "terraform-aws-kops-ecr"
+    description: "Terraform module to provision an ECR repository and grant users and kubernetes nodes access to it."
+    url: "https://github.com/cloudposse/terraform-aws-kops-ecr"
+  - name: "terraform-aws-kops-state-backend"
+    description: "Easily bootstrap kops clusters (DNS & S3 Bucket)"
+    url: "https://github.com/cloudposse/terraform-aws-kops-state-backend"
+  - name: "terraform-aws-kops-external-dns"
+    description: "Terraform module to provision an IAM role for external-dns running in a Kops cluster, and attach an IAM policy to the role with permissions to modify Route53 record sets"
+    url: "https://github.com/cloudposse/terraform-aws-kops-external-dns"
+  - name: "terraform-aws-kops-route53"
+    description: "Terraform module to lookup the IAM role associated with `kops` masters, and attach an IAM policy to the role with permissions to modify Route53 record sets"
+    url: "https://github.com/cloudposse/terraform-aws-kops-route53"
+  - name: "terraform-aws-kops-vault-backend"
+    description: "Terraform module to provision an S3 bucket for HashiCorp Vault secrets storage, and an IAM role and policy with permissions for Kops nodes to access the bucket"
+    url: "https://github.com/cloudposse/terraform-aws-kops-vault-backend"
+  - name: "terraform-aws-kops-chart-repo"
+    description: "Terraform module to provision an S3 bucket for Helm chart repository, and an IAM role and policy with permissions for Kops nodes to access the bucket"
+    url: "https://github.com/cloudposse/terraform-aws-kops-chart-repo"
+  - name: "terraform-aws-eks-cluster"
+    description: "Terraform module to provision an EKS cluster on AWS"
+    url: "https://github.com/cloudposse/terraform-aws-eks-cluster"
+  - name: "terraform-aws-eks-workers"
+    description: "Terraform module to provision an AWS AutoScaling Group, IAM Role, and Security Group for EKS Workers"
+    url: "https://github.com/cloudposse/terraform-aws-eks-workers"
+  - name: "terraform-aws-ec2-autoscale-group"
+    description: "Terraform module to provision AutoScaling Group and Launch Template on AWS"
+    url: "https://github.com/cloudposse/terraform-aws-ec2-autoscale-group"
 
 # Short description of this project
 description: |-
-  Terraform module to create and apply a Kubernetes ConfigMap for `aws-iam-authenticator` to be used with Kops to map IAM principals to Kubernetes users
+  Terraform module to create and apply a [`Kubernetes`](https://kubernetes.io/) ConfigMap to map AWS IAM roles to Kubernetes users/groups.
+  This will configure clusters managed by [`kops`](https://github.com/kubernetes/kops) to use [`aws-iam-authenticator`](https://github.com/kubernetes-sigs/aws-iam-authenticator),
+  allowing to use AWS IAM credentials to authenticate to a Kubernetes cluster.
 
 
 # How to use this project
 usage: |-
-  ### Simple Example
 
   ```hcl
+    module "iam_authenticator_config" {
+      source                = "git::https://github.com/cloudposse/terraform-aws-kops-iam-authenticator-config.git?ref=master"
+      admin_iam_role_arn    = "arn:aws:iam::000000000000:role/KubernetesAdmin"
+      admin_k8s_username    = "kubernetes-admin"
+      admin_k8s_groups      = ["system:masters"]
+      readonly_iam_role_arn = "arn:aws:iam::000000000000:role/KubernetesReadonly"
+      readonly_k8s_username = "kubernetes-readonly"
+      readonly_k8s_groups   = ["system:authenticated"]
+    }
   ```
 
 include:
