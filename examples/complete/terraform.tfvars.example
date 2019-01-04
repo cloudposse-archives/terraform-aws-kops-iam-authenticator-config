@@ -1,3 +1,7 @@
+cluster_id = "us-west-2.testing.example.com"
+
+kube_config_path = "/.kube/config"
+
 admin_iam_role_arn = "arn:aws:iam::000000000000:role/KubernetesAdmin"
 
 admin_k8s_username = "kubernetes-admin"

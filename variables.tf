@@ -1,3 +1,13 @@
+variable "cluster_id" {
+  type        = "string"
+  description = "A unique-per-cluster identifier to prevent replay attacks. Good choices are a random token or a domain name that will be unique to your cluster"
+}
+
+variable "kube_config_path" {
+  type        = "string"
+  description = "Path to the kube config file. Can be sourced from `KUBE_CONFIG` or `KUBECONFIG`"
+}
+
 variable "admin_iam_role_arn" {
   type        = "string"
   description = "IAM Role with admin permissions to map to `admin_k8s_username`"

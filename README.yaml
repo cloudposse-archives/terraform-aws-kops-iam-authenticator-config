@@ -7,6 +7,16 @@
 # Name of this project
 name: terraform-aws-kops-iam-authenticator-config
 
+# Tags of this project
+tags:
+  - aws
+  - terraform
+  - terraform-modules
+  - kops
+  - kubernetes
+  - iam
+  - iam-authenticator
+
 # Logo for this project
 #logo: docs/logo.png
 
@@ -76,6 +86,8 @@ usage: |-
   ```hcl
     module "iam_authenticator_config" {
       source                = "git::https://github.com/cloudposse/terraform-aws-kops-iam-authenticator-config.git?ref=master"
+      cluster_id            = "us-west-2.testing.example.com"
+      kube_config_path =    "/.kube/config"
       admin_iam_role_arn    = "arn:aws:iam::000000000000:role/KubernetesAdmin"
       admin_k8s_username    = "kubernetes-admin"
       admin_k8s_groups      = ["system:masters"]
@@ -84,6 +96,23 @@ usage: |-
       readonly_k8s_groups   = ["system:authenticated"]
     }
   ```
+
+references:
+  - name: "Kops Authentication"
+    description: "Describes what support Kops has for configuring authentication systems"
+    url: "https://github.com/kubernetes/kops/blob/master/docs/authentication.md"
+  - name: "aws-iam-authenticator"
+    description: "A tool to use AWS IAM credentials to authenticate to a Kubernetes cluster"
+    url: "https://github.com/kubernetes-sigs/aws-iam-authenticator"
+  - name: "Getting Started with Terraform Kubernetes provider"
+    description: "Getting Started with Terraform Kubernetes provider"
+    url: "https://www.terraform.io/docs/providers/kubernetes/guides/getting-started.html"
+  - name: "Terraform Kubernetes Provider"
+    description: "Terraform Kubernetes Provider with examples"
+    url: "https://www.terraform.io/docs/providers/kubernetes/index.html"
+  - name: "Kubernetes RBAC Authorization"
+    description: "Using Kubernetes RBAC Authorization"
+    url: "https://kubernetes.io/docs/reference/access-authn-authz/rbac"
 
 include:
   - "docs/targets.md"

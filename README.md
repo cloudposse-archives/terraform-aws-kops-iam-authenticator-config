@@ -50,6 +50,8 @@ We literally have [*hundreds of terraform modules*][terraform_modules] that are 
 ```hcl
   module "iam_authenticator_config" {
     source                = "git::https://github.com/cloudposse/terraform-aws-kops-iam-authenticator-config.git?ref=master"
+    cluster_id            = "us-west-2.testing.example.com"
+    kube_config_path =    "/.kube/config"
     admin_iam_role_arn    = "arn:aws:iam::000000000000:role/KubernetesAdmin"
     admin_k8s_username    = "kubernetes-admin"
     admin_k8s_groups      = ["system:masters"]
@@ -81,6 +83,8 @@ Available targets:
 | admin_iam_role_arn | IAM Role with admin permissions to map to `admin_k8s_username` | string | - | yes |
 | admin_k8s_groups | List of Kubernetes groups to be mapped to `admin_iam_role_arn` | list | - | yes |
 | admin_k8s_username | Kubernetes admin username to be mapped to `admin_iam_role_arn` | string | - | yes |
+| cluster_id | A unique-per-cluster identifier to prevent replay attacks. Good choices are a random token or a domain name that will be unique to your cluster | string | - | yes |
+| kube_config_path | Path to the kube config file. Can be sourced from `KUBE_CONFIG` or `KUBECONFIG` | string | - | yes |
 | readonly_iam_role_arn | IAM Role with readonly permissions to map to `readonly_k8s_username` | string | - | yes |
 | readonly_k8s_groups | List of Kubernetes groups to be mapped to `readonly_iam_role_arn` | list | - | yes |
 | readonly_k8s_username | Kubernetes readonly username to be mapped to `readonly_iam_role_arn` | string | - | yes |
@@ -117,6 +121,18 @@ Check out these related projects.
 - [terraform-aws-eks-workers](https://github.com/cloudposse/terraform-aws-eks-workers) - Terraform module to provision an AWS AutoScaling Group, IAM Role, and Security Group for EKS Workers
 - [terraform-aws-ec2-autoscale-group](https://github.com/cloudposse/terraform-aws-ec2-autoscale-group) - Terraform module to provision AutoScaling Group and Launch Template on AWS
 
+
+
+
+## References
+
+For additional context, refer to some of these links. 
+
+- [Kops Authentication](https://github.com/kubernetes/kops/blob/master/docs/authentication.md) - Describes what support Kops has for configuring authentication systems
+- [aws-iam-authenticator](https://github.com/kubernetes-sigs/aws-iam-authenticator) - A tool to use AWS IAM credentials to authenticate to a Kubernetes cluster
+- [Getting Started with Terraform Kubernetes provider](https://www.terraform.io/docs/providers/kubernetes/guides/getting-started.html) - Getting Started with Terraform Kubernetes provider
+- [Terraform Kubernetes Provider](https://www.terraform.io/docs/providers/kubernetes/index.html) - Terraform Kubernetes Provider with examples
+- [Kubernetes RBAC Authorization](https://kubernetes.io/docs/reference/access-authn-authz/rbac) - Using Kubernetes RBAC Authorization
 
 
 ## Help
