@@ -1,0 +1,128 @@
+---
+#
+# This is the canonical configuration for the `README.md`
+# Run `make readme` to rebuild the `README.md`
+#
+
+# Name of this project
+name: terraform-aws-kops-iam-authenticator-config
+
+# Tags of this project
+tags:
+  - aws
+  - terraform
+  - terraform-modules
+  - kops
+  - kubernetes
+  - iam
+  - iam-authenticator
+
+# Logo for this project
+#logo: docs/logo.png
+
+# License of this project
+license: "APACHE2"
+
+# Canonical GitHub repo
+github_repo: cloudposse/terraform-aws-kops-iam-authenticator-config
+
+# Badges to display
+badges:
+  - name: "Build Status"
+    image: "https://travis-ci.org/cloudposse/terraform-aws-kops-iam-authenticator-config.svg?branch=master"
+    url: "https://travis-ci.org/cloudposse/terraform-aws-kops-iam-authenticator-config"
+  - name: "Latest Release"
+    image: "https://img.shields.io/github/release/cloudposse/terraform-aws-kops-iam-authenticator-config.svg"
+    url: "https://github.com/cloudposse/terraform-aws-kops-iam-authenticator-config/releases/latest"
+  - name: "Slack Community"
+    image: "https://slack.cloudposse.com/badge.svg"
+    url: "https://slack.cloudposse.com"
+
+related:
+  - name: "terraform-aws-kops-metadata"
+    description: "Terraform module to lookup resources within a Kops cluster for easier integration with Terraform"
+    url: "https://github.com/cloudposse/terraform-aws-kops-metadata"
+  - name: "terraform-aws-kops-vpc-peering"
+    description: "Terraform module to create a peering connection between a backing services VPC and a VPC created by Kops"
+    url: "https://github.com/cloudposse/terraform-aws-kops-vpc-peering"
+  - name: "terraform-aws-kops-ecr"
+    description: "Terraform module to provision an ECR repository and grant users and kubernetes nodes access to it."
+    url: "https://github.com/cloudposse/terraform-aws-kops-ecr"
+  - name: "terraform-aws-kops-state-backend"
+    description: "Easily bootstrap kops clusters (DNS & S3 Bucket)"
+    url: "https://github.com/cloudposse/terraform-aws-kops-state-backend"
+  - name: "terraform-aws-kops-external-dns"
+    description: "Terraform module to provision an IAM role for external-dns running in a Kops cluster, and attach an IAM policy to the role with permissions to modify Route53 record sets"
+    url: "https://github.com/cloudposse/terraform-aws-kops-external-dns"
+  - name: "terraform-aws-kops-route53"
+    description: "Terraform module to lookup the IAM role associated with `kops` masters, and attach an IAM policy to the role with permissions to modify Route53 record sets"
+    url: "https://github.com/cloudposse/terraform-aws-kops-route53"
+  - name: "terraform-aws-kops-vault-backend"
+    description: "Terraform module to provision an S3 bucket for HashiCorp Vault secrets storage, and an IAM role and policy with permissions for Kops nodes to access the bucket"
+    url: "https://github.com/cloudposse/terraform-aws-kops-vault-backend"
+  - name: "terraform-aws-kops-chart-repo"
+    description: "Terraform module to provision an S3 bucket for Helm chart repository, and an IAM role and policy with permissions for Kops nodes to access the bucket"
+    url: "https://github.com/cloudposse/terraform-aws-kops-chart-repo"
+  - name: "terraform-aws-eks-cluster"
+    description: "Terraform module to provision an EKS cluster on AWS"
+    url: "https://github.com/cloudposse/terraform-aws-eks-cluster"
+  - name: "terraform-aws-eks-workers"
+    description: "Terraform module to provision an AWS AutoScaling Group, IAM Role, and Security Group for EKS Workers"
+    url: "https://github.com/cloudposse/terraform-aws-eks-workers"
+  - name: "terraform-aws-ec2-autoscale-group"
+    description: "Terraform module to provision AutoScaling Group and Launch Template on AWS"
+    url: "https://github.com/cloudposse/terraform-aws-ec2-autoscale-group"
+
+# Short description of this project
+description: |-
+  Terraform module to create and apply a [`Kubernetes`](https://kubernetes.io/) ConfigMap to map AWS IAM roles to Kubernetes users/groups.
+  This will configure clusters managed by [`kops`](https://github.com/kubernetes/kops) to use [`aws-iam-authenticator`](https://github.com/kubernetes-sigs/aws-iam-authenticator),
+  allowing to use AWS IAM credentials to authenticate to a Kubernetes cluster.
+
+
+# How to use this project
+usage: |-
+
+  ```hcl
+    module "iam_authenticator_config" {
+      source                = "git::https://github.com/cloudposse/terraform-aws-kops-iam-authenticator-config.git?ref=master"
+      cluster_id            = "us-west-2.testing.example.com"
+      kube_config_path =    "/.kube/config"
+      admin_iam_role_arn    = "arn:aws:iam::000000000000:role/KubernetesAdmin"
+      admin_k8s_username    = "kubernetes-admin"
+      admin_k8s_groups      = ["system:masters"]
+      readonly_iam_role_arn = "arn:aws:iam::000000000000:role/KubernetesReadonly"
+      readonly_k8s_username = "kubernetes-readonly"
+      readonly_k8s_groups   = ["system:authenticated"]
+    }
+  ```
+
+references:
+  - name: "Kops Authentication"
+    description: "Describes what support Kops has for configuring authentication systems"
+    url: "https://github.com/kubernetes/kops/blob/master/docs/authentication.md"
+  - name: "aws-iam-authenticator"
+    description: "A tool to use AWS IAM credentials to authenticate to a Kubernetes cluster"
+    url: "https://github.com/kubernetes-sigs/aws-iam-authenticator"
+  - name: "Getting Started with Terraform Kubernetes provider"
+    description: "Getting Started with Terraform Kubernetes provider"
+    url: "https://www.terraform.io/docs/providers/kubernetes/guides/getting-started.html"
+  - name: "Terraform Kubernetes Provider"
+    description: "Terraform Kubernetes Provider with examples"
+    url: "https://www.terraform.io/docs/providers/kubernetes/index.html"
+  - name: "Kubernetes RBAC Authorization"
+    description: "Using Kubernetes RBAC Authorization"
+    url: "https://kubernetes.io/docs/reference/access-authn-authz/rbac"
+
+include:
+  - "docs/targets.md"
+  - "docs/terraform.md"
+
+# Contributors to this project
+contributors:
+  - name: "Erik Osterman"
+    homepage: "https://github.com/osterman"
+    github: "osterman"
+  - name: "Andriy Knysh"
+    homepage: "https://github.com/aknysh"
+    github: "aknysh"
