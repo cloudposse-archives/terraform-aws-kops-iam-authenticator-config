@@ -1,6 +1,7 @@
 resource "random_pet" "cluster" {
-  count       = "${var.enabled == "true" ? 1 : 0}"
+  count  = "${var.enabled == "true" ? 1 : 0}"
   length = 4
+
   keepers = {
     admin_iam_role_arn    = "${var.admin_iam_role_arn}"
     readonly_iam_role_arn = "${var.readonly_iam_role_arn}"
@@ -31,7 +32,8 @@ provider "kubernetes" {
 # https://github.com/kubernetes/kops/blob/master/docs/authentication.md
 # https://github.com/kubernetes-sigs/aws-iam-authenticator
 resource "kubernetes_config_map" "aws_iam_authenticator" {
-  count       = "${var.enabled == "true" ? 1 : 0}"
+  count = "${var.enabled == "true" ? 1 : 0}"
+
   metadata {
     name      = "aws-iam-authenticator"
     namespace = "kube-system"
