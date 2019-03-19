@@ -1,5 +1,5 @@
 resource "random_pet" "cluster" {
-  count  = "${var.enabled == "true" ? 1 : 0}"
+  count  = "${var.enabled == "true" && var.cluster_id == "random" ? 1 : 0}"
   length = 4
 
   keepers = {
@@ -12,7 +12,7 @@ data "template_file" "config" {
   template = "${file("${path.module}/config.tpl")}"
 
   vars {
-    cluster_id            = "${var.cluster_id == "random" ? element(concat(random_pet.cluster.*.id, list("")), 0) : var.cluster_id}"
+    cluster_id            = "${var.cluster_id == "random" ? join("", random_pet.cluster.*.id) : var.cluster_id}"
     admin_iam_role_arn    = "${var.admin_iam_role_arn}"
     admin_k8s_username    = "${var.admin_k8s_username}"
     admin_k8s_groups      = "${jsonencode(var.admin_k8s_groups)}"
