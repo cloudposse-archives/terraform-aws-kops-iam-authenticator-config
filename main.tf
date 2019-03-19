@@ -24,15 +24,18 @@ data "template_file" "config" {
 
 # https://www.terraform.io/docs/providers/kubernetes/guides/getting-started.html
 # https://www.terraform.io/docs/providers/kubernetes/index.html
+# https://www.terraform.io/docs/configuration/providers.html#alias-multiple-provider-instances
 provider "kubernetes" {
+  alias            = "aws_iam_authenticator"
   config_path      = "${var.kube_config_path}"
-  load_config_file = "${var.enabled == "true"}"
+  load_config_file = true
 }
 
 # https://github.com/kubernetes/kops/blob/master/docs/authentication.md
 # https://github.com/kubernetes-sigs/aws-iam-authenticator
 resource "kubernetes_config_map" "aws_iam_authenticator" {
-  count = "${var.enabled == "true" ? 1 : 0}"
+  count    = "${var.enabled == "true" ? 1 : 0}"
+  provider = "kubernetes.aws_iam_authenticator"
 
   metadata {
     name      = "aws-iam-authenticator"
@@ -47,3 +50,11 @@ resource "kubernetes_config_map" "aws_iam_authenticator" {
     "config.yaml" = "${data.template_file.config.rendered}"
   }
 }
+
+## resources created
+#
+# aws_iam_role.admin
+# aws_iam_role.readonly
+# module.iam_authenticator_config.data.template_file.config
+# module.iam_authenticator_config.kubernetes_config_map.aws_iam_authenticator
+
