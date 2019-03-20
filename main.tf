@@ -24,15 +24,23 @@ data "template_file" "config" {
 
 # https://www.terraform.io/docs/providers/kubernetes/guides/getting-started.html
 # https://www.terraform.io/docs/providers/kubernetes/index.html
+# https://www.terraform.io/docs/configuration/providers.html#alias-multiple-provider-instances
 provider "kubernetes" {
-  config_path      = "${var.kube_config_path}"
-  load_config_file = "${var.enabled == "true"}"
+  alias = "aws_iam_authenticator"
+
+  # Even when this module is disabled, if a previous, enabled version created
+  # kubernetes_config_map.aws_iam_authenticator
+  # you will need to provide a valid kube_config_path to enable terraform to query and delete that resource
+  config_path = "${var.kube_config_path}"
+
+  load_config_file = true
 }
 
 # https://github.com/kubernetes/kops/blob/master/docs/authentication.md
 # https://github.com/kubernetes-sigs/aws-iam-authenticator
 resource "kubernetes_config_map" "aws_iam_authenticator" {
-  count = "${var.enabled == "true" ? 1 : 0}"
+  count    = "${var.enabled == "true" ? 1 : 0}"
+  provider = "kubernetes.aws_iam_authenticator"
 
   metadata {
     name      = "aws-iam-authenticator"
